@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cartline"
+version = "0.1.0"
+description = "Spark ETL platform over a 110M event e-commerce clickstream"
+requires-python = ">=3.11"
+dependencies = [
+    "pyspark==4.2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+]
+orchestration = [
+    "apache-airflow==3.3.2",
+]
+
+[project.scripts]
+cartline = "cartline.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["cartline*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]

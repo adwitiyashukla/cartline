@@ -1,0 +1,72 @@
+[project]
+name = "cartline"
+
+[paths]
+source = "data/source"
+landing = "data/landing"
+lake = "data/lake"
+checkpoints = "data/checkpoints"
+reports = "data/reports"
+
+[source]
+months = ["2019-Oct"]
+file_pattern = "{month}.csv.gz"
+
+[spark]
+app_name = "cartline"
+master = "local[6]"
+driver_memory = "4g"
+shuffle_partitions = 48
+max_partition_bytes = "128m"
+parquet_compression = "snappy"
+adaptive = true
+adaptive_skew_join = true
+local_dir = "data/tmp"
+log_level = "WARN"
+
+[ingest]
+max_quarantine_rate = 0.02
+max_records_per_file = 2000000
+
+[silver]
+session_gap_minutes = 30
+dedup_keys = ["user_id", "user_session", "product_id", "event_type", "event_time"]
+output_partitions = 8
+
+[dimension]
+attributes = ["brand", "category_id", "category_code", "price"]
+
+[gold]
+rfm_buckets = 5
+top_products = 50
+output_partitions = 4
+
+[stream]
+watermark_minutes = 120
+max_files_per_trigger = 2
+trigger = "availableNow"
+processing_time_seconds = 5
+
+[quality]
+fail_on_error = true
+max_null_brand_rate = 0.30
+max_null_category_rate = 0.50
+
+[generate]
+events = 1000000
+products = 120000
+users = 400000
+seed = 20191001
+start_date = "2019-10-01"
+end_date = "2019-11-30"
+output_partitions = 8
+duplicate_rate = 0.001
+null_session_rate = 0.004
+null_brand_rate = 0.13
+null_category_rate = 0.31
+bad_row_rate = 0.0005
+cart_rate = 0.031
+remove_rate = 0.019
+purchase_rate = 0.010
+black_friday = "2019-11-29"
+black_friday_boost = 3.0
