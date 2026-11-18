@@ -4,8 +4,6 @@
 
 A Spark ETL pipeline over a real e-commerce clickstream. It takes the October 2019 file of the REES46 multi category store dataset, 42.4 million events, and turns it into a small lakehouse: a raw bronze layer, a cleaned silver layer, an SCD2 product dimension and seven gold tables for sessions, funnels, traffic and customers. A Structured Streaming job reuses the same parsing code, and two Airflow DAGs drive the CLI.
 
-I built it to get good at the parts of big data ETL that are easy to get wrong, like idempotent reruns, partition layout, dedup, late data and sessions that cross midnight.
-
 ## Pipeline
 
 ```mermaid
